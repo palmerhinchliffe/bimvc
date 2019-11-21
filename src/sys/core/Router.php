@@ -1,57 +1,72 @@
 <?php
-defined(SYSPATH) OR exit();
+defined('SYSPATH') OR exit();
 
 class BIMVC_Router
 {
 	/**
      * @var Current url
      */
-	public $url;
+	public $url = null;
 
 	/**
      * @var Controller
      */
-	public $controller;
+	public $controller = null;
 
 	/**
      * @var Controller method
      */
-	public $action;
+	public $action = null;
 
 	/**
      * @var Controller method parameters
      */
-	public $params;
+	public $params = null;
 
 	public function __construct()
 	{
 		$this->handle_url();
 
-		// Does the controller exist?
 		if ($this->controller) {
-			require APPPATH . 'controllers/' . $this->url_controller . '.php';
-			$this->controller = new $this->url_controller();
 
-			// Does the method exist?
-			if (method_exists($this->controller, $this->action)) {
+			// Does the controller exist?
+			if (file_exists(APPPATH . 'controllers/' . $this->controller . '.php')) {
+				require_once APPPATH . 'controllers/' . $this->controller . '.php';
+				$this->controller = new $this->controller;
 
-				// Are there any parameters?
-				if (!empty($this->params)) {
-					// Call method with parameters
-					call_user_func_array(array($this->controller, $this->action), $this->params);
+				// Does the method exist?
+				if (method_exists($this->controller, $this->action)) {
+
+					// Are there any parameters?
+					if (!empty($this->params)) {
+
+						// Call method with parameters
+						call_user_func_array(array($this->controller, $this->action), $this->params);
+					} else {
+
+						// No parameters
+						$this->controller->{$this->action}();
+					}
+
 				} else {
-					// No parameters
-					$this->controller->{$this->action}();
-				}
 
+					// Method does not exist - load default index method of controller
+               		if (method_exists($this->controller, 'index')) {
+               			$this->controller->index();
+               		} else {
+
+               			// Controller missing index method
+               			exit('Controller has no index method!');
+               		}
+				}
 			} else {
-				// Method does not exist - load default index method of controller
-                $this->controller->index();
+				// Controller doesn't exit
+				exit('Controller does not exist!');
 			}
 
 		} else {
-			// Controller does not exist
-
+			// Controller not provided
+			exit('Welcome!');
 		}
 	}
 
@@ -62,11 +77,11 @@ class BIMVC_Router
 			$url = parse_url($_SERVER['REQUEST_URI']);
 			$segments = explode('/', $url['path']);
 
-			$this->controller = isset($segments[1]) ? $segments[1] : null;
-			$this->action = isset($segments[2]) ? $segments[2] : null;
+			$this->controller = isset($segments[2]) ? $segments[2] : null;
+			$this->action = isset($segments[3]) ? $segments[3] : null;
 
 			// Remove controller and method from url segments leaving just paramaters
-			unset($segments[0], $segments[1], $segments[2]);
+			unset($segments[0], $segments[1], $segments[2], $segments[3]);
 
 			// Rebase array keys and store the URL parameters
 			$this->params = array_values($segments);

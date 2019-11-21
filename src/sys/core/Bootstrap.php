@@ -1,18 +1,19 @@
 <?php
-defined(SYSPATH) OR exit();
-
+defined('SYSPATH') OR exit();
 /* core/Bootstrap.php */
 /* Loads core classes */
 
 /* Include composer autoloader */
 if (file_exists(ROOTPATH . 'vendor/autoload.php')) {
-	// Autoloader exists
-	// load it...
+	require_once ROOTPATH . 'vendor/autoload.php';
 } else {
-	exit('Cannot locate ' . ROOTPATH . 'vendor/autoload.php!');
+	exit('Cannot locate autoload.php!');
 }
 
-/* Load router */
+/* Instantiate the BIMVC_Router class */
+require_once 'Router.php';
 
-// Test code
-echo (parse_url($_SERVER['REQUEST_URI']));
+// BIMVC_Controller
+require_once 'Controller.php';
+
+$BIMVC_RTR = new BIMVC_Router;
