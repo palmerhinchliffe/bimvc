@@ -20,8 +20,8 @@ switch(ENVIRONMENT) {
 /* Set constants for root, application, and system directories */
 /***************************************************************/
 $root_path = dirname(__DIR__, 1) . '/'; // domain.com/
-$sys_path = $root_path . '/src/sys/'; // domain.com/src/sys
-$app_path = $root_path . '/src/app/'; // domain.com/src/app
+$sys_path = $root_path . '/sys/'; // domain.com/src/sys
+$app_path = $root_path . '/app/'; // domain.com/src/app
 
 define('ROOTPATH', $root_path);
 is_dir($sys_path) ? define('SYSPATH', $sys_path) : exit("Configuration error : /src/sys/ directory missing.");

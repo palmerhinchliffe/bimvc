@@ -19,6 +19,11 @@ class BIMVC_Controller
 		$this->load_twig();
 	}
 
+	public function render($view, $data = array())
+	{
+		$this->twig->display($view, $data);
+	}
+
 	private function load_twig()
 	{
 	    $loader = new Twig_Loader_Filesystem(
