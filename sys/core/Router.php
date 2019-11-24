@@ -31,32 +31,33 @@ class BIMVC_Router
 	// 
 	public function route()
 	{
+
+		// if admin....
+		//
+		//
+		//
+
 		if ($this->handle_url()) {
 
 			// Is the controller name provided?
-			if ($this->controller) {
-
-				// Does the controller exist?
-				if (file_exists(APPPATH . 'controllers/' . $this->controller . '.php')) {
-
-					// Controller exists
-					require_once APPPATH . 'controllers/' . $this->controller . '.php';
-
-				} else {
-
-					// Controller doesn't exist -- get error/404
-					$this->controller = 'BIMVC_Error';
-					require_once APPPATH . 'controllers/' . $this->controller . '.php';
-				}
-
-			} else {
+			if (!$this->controller) {
 				// Controller name not provided -- go home
-				$this->controller = 'Welcome';
-				require_once APPPATH . 'controllers/' . $this->controller . '.php';
+				$this->controller = BIMVC_Config::HOME_CONTROLLER;
 			}
+
+			// Does the controller exist?
+			if (!file_exists(APPPATH . '/controllers/' . $this->controller . '.php')) {
+
+				// Controller doesn't exist -- get error/404
+				$this->controller = 'Public_Error';
+			}
+
+
+			require_once APPPATH . '/controllers/' . $this->controller . '.php';
 			$this->controller = new $this->controller;
 			$this->dispatch();
 		} else {
+			// invalid url
 			exit('Invalid URL');
 		}
 	}
@@ -96,25 +97,17 @@ class BIMVC_Router
 	{
 		if (isset($_SERVER['REQUEST_URI']) && $this->validate_url($_SERVER['REQUEST_URI'])) {
 			$url = parse_url($_SERVER['REQUEST_URI']);
-			$segments = explode('/', $url['path']);
+			$url = explode('/', $url['path']);
 
-			// Is controller in a sub-directory?
-			if (is_dir(APPPATH . 'controllers/' . $segments[2])) {
-				$this->controller = isset($segments[3]) ? $segments[3] : null;
-				$this->action = isset($segments[4]) ? $segments[4] : null;
+			$this->controller_sub_dir = null;
+			$this->controller = isset($url[2]) ? ucfirst($url[2]) : null;
+			$this->action = isset($url[3]) ? $url[3] : null;
 
-				// Remove controller and method from url segments leaving just paramaters
-				unset($segments[0], $segments[1], $segments[2], $segments[3], $segments[4]);
-			} else {
-				$this->controller = isset($segments[2]) ? $segments[2] : null;
-				$this->action = isset($segments[3]) ? $segments[3] : null;
-
-				// Remove controller and method from url segments leaving just paramaters
-				unset($segments[0], $segments[1], $segments[2], $segments[3]);
-			}
+			// Remove controller and method from url leaving just paramaters
+			unset($url[0], $url[1], $url[2], $url[3]);
 
 			// Rebase array keys and store the URL parameters
-			$this->params = array_values($segments);
+			$this->params = array_values($url);
 
 			return true;
 		}

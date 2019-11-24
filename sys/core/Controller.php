@@ -4,36 +4,28 @@ defined('SYSPATH') OR exit();
 class BIMVC_Controller
 {
     /**
-     * @var Database connection
-     */
-	public $db;
-
-    /**
      * @var Twig environment
      */
 	public $twig;
 
-	public function __construct()
-	{
-		// Initialise twig environment
-		$this->load_twig();
-	}
-
 	public function render($view, $data = array())
 	{
-		$this->twig->display($view, $data);
+		$loader = new \Twig\Loader\FilesystemLoader(APPPATH . '/views');
+		$twig = new \Twig\Environment($loader, ['debug' => BIMVC_Config::TWIG_DEBUG]);
+		$twig->display($view, $data);
 	}
 
-	private function load_twig()
-	{
-	    $loader = new Twig_Loader_Filesystem(
-	        array (
-	            APPPATH . 'views'
-	        )
-	    );
-	    // set up environment
-	    $params = array(
-	    );
-	    $this->twig = new Twig_Environment($loader, $params);
+	public function load_model($model) {
+		$model = ucfirst($model) . '_Model';
+		if (file_exists(APPPATH . '/models/' . $model . '.php')) {
+			require_once APPPATH . '/models/' . $model . '.php';
+			$model = new $model;
+			return $model;
+		} else {
+			// Error
+			exit("Can't find model!");
+		}
 	}
+
+	// Load twig and catch any errors
 }
