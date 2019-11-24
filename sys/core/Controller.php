@@ -15,8 +15,8 @@ class BIMVC_Controller
 		$twig->display($view, $data);
 	}
 
-	public function load_model($model) {
-		$model = ucfirst($model) . '_Model';
+	public function load_model($name) {
+		$model = ucfirst($name) . '_Model';
 		if (file_exists(APPPATH . '/models/' . $model . '.php')) {
 			require_once APPPATH . '/models/' . $model . '.php';
 			$model = new $model;
@@ -24,6 +24,18 @@ class BIMVC_Controller
 		} else {
 			// Error
 			exit("Can't find model!");
+		}
+	}
+
+	public function load_library($name) {
+		$library = ucfirst($name);
+		if (file_exists(SYSPATH . '/lib/' . $library . '.php')) {
+			require_once SYSPATH . '/lib/' . $library . '.php';
+			$library = new $library;
+			return $library;
+		} else {
+			// Error
+			exit("Can't find library!");
 		}
 	}
 

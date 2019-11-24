@@ -28,19 +28,15 @@ class BIMVC_Router
 		$this->route();
 	}
 
-	// 
+	// Route URL to controller
 	public function route()
 	{
-
-		// if admin....
-		//
-		//
-		//
-
-		if ($this->handle_url()) {
+		// Attempt to validate and split the url
+		if ($this->split_url()) {
 
 			// Is the controller name provided?
 			if (!$this->controller) {
+
 				// Controller name not provided -- go home
 				$this->controller = BIMVC_Config::HOME_CONTROLLER;
 			}
@@ -50,6 +46,7 @@ class BIMVC_Router
 
 				// Controller doesn't exist -- get error/404
 				$this->controller = 'Public_Error';
+				$this->action = 'not_found';
 			}
 
 
@@ -62,6 +59,7 @@ class BIMVC_Router
 		}
 	}
 
+	// Call the method
 	private function dispatch()
 	{
 		// Does the method exist?
@@ -93,7 +91,7 @@ class BIMVC_Router
 
 	/* Gets the url and splits it into controller, method, and params */
 	/* Return: BOOLEAN */
-	private function handle_url()
+	private function split_url()
 	{
 		if (isset($_SERVER['REQUEST_URI']) && $this->validate_url($_SERVER['REQUEST_URI'])) {
 			$url = parse_url($_SERVER['REQUEST_URI']);

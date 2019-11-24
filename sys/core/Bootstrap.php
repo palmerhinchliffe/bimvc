@@ -1,7 +1,7 @@
 <?php
 defined('SYSPATH') OR exit();
 /* core/Bootstrap.php */
-/* Loads core classes and routes URL */
+/* Loads core classes */
 
 /* Include composer autoloader */
 if (file_exists(ROOTPATH . '/vendor/autoload.php')) {
