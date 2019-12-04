@@ -1,7 +1,7 @@
 <?php
-defined('SYSPATH') OR exit();
+defined('APPPATH') OR exit();
 
-class Example_Model extends BIMVC_Model
+class My_Model extends Core\Model
 {
 	public function hello()
 	{
@@ -10,6 +10,6 @@ class Example_Model extends BIMVC_Model
 
 	public function get_all_animals()
 	{
-		return $this->db->select_all('animals');
+		return;
 	}
 }

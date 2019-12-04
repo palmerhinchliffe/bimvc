@@ -1,7 +1,9 @@
 <?php
-defined('SYSPATH') OR exit();
+namespace Core;
 
-class BIMVC_Controller
+defined('APPPATH') OR exit();
+
+class Controller
 {
     /**
      * @var Twig environment
@@ -11,33 +13,31 @@ class BIMVC_Controller
 	public function render($view, $data = array())
 	{
 		$loader = new \Twig\Loader\FilesystemLoader(APPPATH . '/views');
-		$twig = new \Twig\Environment($loader, ['debug' => BIMVC_Config::TWIG_DEBUG]);
+		$twig = new \Twig\Environment($loader, ['debug' => \Config\Config::TWIG_DEBUG]);
 		$twig->display($view, $data);
 	}
 
 	public function load_model($name) {
-		$model = ucfirst($name) . '_Model';
+		$model = ucfirst($name);
 		if (file_exists(APPPATH . '/models/' . $model . '.php')) {
 			require_once APPPATH . '/models/' . $model . '.php';
 			$model = new $model;
 			return $model;
 		} else {
-			// Error
-			exit("Can't find model!");
+			// Error model cant be found
+			Error::error('Model cannot be found. Does the file exist in "/src/models/"?');
 		}
 	}
 
 	public function load_library($name) {
 		$library = ucfirst($name);
-		if (file_exists(SYSPATH . '/lib/' . $library . '.php')) {
-			require_once SYSPATH . '/lib/' . $library . '.php';
+		if (file_exists(APPPATH . '/lib/' . $library . '.php')) {
+			require_once APPPATH . '/lib/' . $library . '.php';
 			$library = new $library;
 			return $library;
 		} else {
 			// Error
-			exit("Can't find library!");
+			Error::error('Library cannot be found. Does the file exist in "/src/libraries/"?');
 		}
 	}
-
-	// Load twig and catch any errors
 }

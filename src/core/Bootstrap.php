@@ -1,7 +1,13 @@
 <?php
-defined('SYSPATH') OR exit();
+namespace Core;
+
+defined('APPPATH') OR exit();
+
 /* core/Bootstrap.php */
 /* Loads core classes */
+
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
 
 /* Include composer autoloader */
 if (file_exists(ROOTPATH . '/vendor/autoload.php')) {
@@ -10,22 +16,26 @@ if (file_exists(ROOTPATH . '/vendor/autoload.php')) {
 	exit('Cannot locate autoload.php!');
 }
 
-//
-//
-/* Put below require statements into try/catch -- throw error if any of them are missing...
-//
-//
-/* Config */
+/* App Config */
 require_once APPPATH . '/config/Config.php';
 
-/* BIMVC_Router class */
+/* BIMVC core router */
 require_once 'Router.php';
 
-// BIMVC_Controller -- base controller
+// BIMVC core controller
 require_once 'Controller.php';
 
-// BIMVC_Model -- base model class
+// BIMVC core model
 require_once 'Model.php';
 
+// BIMVC global helper functions
+require_once 'Globals.php';
+
+/* BIMVC core error handler */
+require_once 'Error.php';
+
+// Load doctrine ORM
+//$entity_manager = Database::get_entity_manager();
+
 // Instantiate router class and route url!
-$BIMVC_RTR = new BIMVC_Router;
+$BIMVC_RTR = new Router;

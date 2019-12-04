@@ -1,7 +1,9 @@
 <?php
-defined('SYSPATH') OR exit();
+namespace Core;
 
-class BIMVC_Router
+defined('APPPATH') OR exit();
+
+class Router
 {
 	/**
      * @var Current url
@@ -38,7 +40,7 @@ class BIMVC_Router
 			if (!$this->controller) {
 
 				// Controller name not provided -- go home
-				$this->controller = BIMVC_Config::HOME_CONTROLLER;
+				$this->controller = \config\Config::BASE_CONTROLLER;
 			}
 
 			// Does the controller exist?

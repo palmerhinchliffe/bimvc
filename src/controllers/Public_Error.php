@@ -1,7 +1,7 @@
 <?php
-defined('SYSPATH') OR exit();
+defined('APPPATH') OR exit();
 
-class Public_Error extends BIMVC_Controller
+class Public_Error extends \Core\Controller
 {
 	public function index() {
 		$this->render('errors/404.html', array('error' => 'generic error index'));
