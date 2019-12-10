@@ -1,12 +1,14 @@
 <?php
 
+namespace Entities;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="products")
+ * @ORM\Table(name="blogs")
  */
-class Product
+class Blog
 {
     /** 
      * @ORM\Id
@@ -18,5 +20,16 @@ class Product
     public function getId()
     {
         return $this->id;
+    }
+
+    /** 
+     * @ORM\Title
+     * @ORM\Column(type="string")
+     */
+    protected $title;
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

@@ -8,7 +8,8 @@
     ],
     "require": {
         "twig/twig": "^2.0",
-        "doctrine/orm": "*"
+        "doctrine/orm": "*",
+        "delight-im/auth": "^8.1"
     },
     "autoload": {
 	"psr-0": {"": "src/"}

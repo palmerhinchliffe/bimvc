@@ -38,19 +38,16 @@ class Router
 
 			// Is the controller name provided?
 			if (!$this->controller) {
-
 				// Controller name not provided -- go home
 				$this->controller = \config\Config::BASE_CONTROLLER;
 			}
 
 			// Does the controller exist?
 			if (!file_exists(APPPATH . '/controllers/' . $this->controller . '.php')) {
-
 				// Controller doesn't exist -- get error/404
-				$this->controller = 'Public_Error';
-				$this->action = 'not_found';
+				Error::error('Page not found', true);
+				exit();
 			}
-
 
 			require_once APPPATH . '/controllers/' . $this->controller . '.php';
 			$this->controller = new $this->controller;
@@ -61,7 +58,7 @@ class Router
 		}
 	}
 
-	// Call the method
+	// Call the action
 	private function dispatch()
 	{
 		// Does the method exist?
@@ -86,7 +83,8 @@ class Router
 	   		} else {
 
 	   			// Controller missing index() method
-	   			exit('Controller has no index method!');
+	   			Error::error('Controller has no index method', true);
+	   			exit();
 	   		}
 		}
 	}

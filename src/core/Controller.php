@@ -18,14 +18,17 @@ class Controller
 	}
 
 	public function load_model($name) {
-		$model = ucfirst($name);
-		if (file_exists(APPPATH . '/models/' . $model . '.php')) {
-			require_once APPPATH . '/models/' . $model . '.php';
+		if (file_exists(APPPATH . '/models/' . $name . '.php')) {
+			require_once APPPATH . '/models/' . $name . '.php';
 			$model = new $model;
 			return $model;
 		} else {
 			// Error model cant be found
-			Error::error('Model cannot be found. Does the file exist in "/src/models/"?');
+			Error::error(array(
+					'development' => 'Model cannot be found. Does the file exist in "/src/models/"?',
+					'public' => '' // 404
+				)
+			);
 		}
 	}
 
@@ -37,7 +40,8 @@ class Controller
 			return $library;
 		} else {
 			// Error
-			Error::error('Library cannot be found. Does the file exist in "/src/libraries/"?');
+					'development' => 'Library cannot be found. Does the file exist in "/src/libraries/"?',
+					'public' => '' // 404
 		}
 	}
 }
