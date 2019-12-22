@@ -11,23 +11,25 @@ class Error
 	 **/
 	public static function exception($exception)
 	{
-		if ($log) error_log($exception->get_message(), APPPATH . '/logs/errors.log' . '\n \n');
+		// Log exception
+		error_log($exception->get_message(), APPPATH . '/logs/errors.log' . '\n \n');
 	}
 
-	public static function error(...$error, $log = false) {
+	/**
+	 * Handles errors
+	 *
+	 **/
+	public static function error($error)
+	{
+		// Log error
+		error_log($error, 3, APPPATH . '/logs/errors.log');
 
 		// Is the error public?
 		if (\Config\Config::ENVIRONMENT === 'production') {
-
+			exit('404');
 		} elseif (\Config\Config::ENVIRONMENT === 'development') {
-
+			exit($error);
 		}
-
-		// else {}
-		// dev error
-
-		if ($log) error_log($error, 3, APPPATH . '/logs/errors.log');
-
-		exit($error=>'development');
 	}
+
 }

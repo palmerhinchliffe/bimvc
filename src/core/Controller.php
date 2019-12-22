@@ -5,43 +5,31 @@ defined('APPPATH') OR exit();
 
 class Controller
 {
-    /**
-     * @var Twig environment
-     */
-	public $twig;
-
-	public function render($view, $data = array())
+	public function render($template, ...$data)
 	{
-		$loader = new \Twig\Loader\FilesystemLoader(APPPATH . '/views');
-		$twig = new \Twig\Environment($loader, ['debug' => \Config\Config::TWIG_DEBUG]);
-		$twig->display($view, $data);
+		$view = new View;
+		$view->render($template, $data);
 	}
 
-	public function load_model($name) {
+	public function load_model($name)
+	{
 		if (file_exists(APPPATH . '/models/' . $name . '.php')) {
 			require_once APPPATH . '/models/' . $name . '.php';
-			$model = new $model;
+			$model = new $name;
 			return $model;
 		} else {
-			// Error model cant be found
-			Error::error(array(
-					'development' => 'Model cannot be found. Does the file exist in "/src/models/"?',
-					'public' => '' // 404
-				)
-			);
+			// Error: model cannot be found
+			Error::error('Model cannot be found. Does the class exist in "/src/models/"?');
 		}
 	}
 
 	public function load_library($name) {
-		$library = ucfirst($name);
-		if (file_exists(APPPATH . '/lib/' . $library . '.php')) {
-			require_once APPPATH . '/lib/' . $library . '.php';
-			$library = new $library;
+		if (file_exists(APPPATH . '/lib/' . $name . '.php')) {
+			require_once APPPATH . '/lib/' . $name . '.php';
+			$library = new $name;
 			return $library;
 		} else {
-			// Error
-					'development' => 'Library cannot be found. Does the file exist in "/src/libraries/"?',
-					'public' => '' // 404
+			Error::error('Model cannot be found. Does the class exist in "/src/models/"?');
 		}
 	}
 }

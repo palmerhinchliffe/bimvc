@@ -17,13 +17,13 @@ switch(ENVIRONMENT) {
 	break;
 }
 
-/* Set constants for root, application, and system directories */
-/***************************************************************/
+/* Set constant for application directory */
+/******************************************/
 $root_path = dirname(__DIR__, 1); // domain.com/
 $app_path = $root_path . '/src'; // domain.com/app
 
 define('ROOTPATH', $root_path);
-is_dir($app_path) ? define('APPPATH', $app_path) : exit("Configuration error: project/src directory missing.");
+is_dir($app_path) ? define('APPPATH', $app_path) : exit("Configuration error: project directory missing.");
 
 /* Load the bootstrap file to kick things off */
 /**********************************************/

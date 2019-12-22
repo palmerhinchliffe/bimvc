@@ -8,8 +8,9 @@ class Home extends Core\Controller
 	}
 
 	public function index() {
-		$products_model = $this->load_model('blogs');
-		echo var_dump($blogs);
-		echo 'Homepage';
+		$data = array(
+			'message' => 'Rise and shine, Dr. Freeman...',
+		);
+		$this->render('welcome.html', $data);
 	}
 }
