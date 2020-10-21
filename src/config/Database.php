@@ -8,9 +8,9 @@ class Database
 	const DB_CONFIG = array(
 		'driver'		 => 'pdo_mysql',
 		'host'			 => 'localhost',
-		'dbname'		 => 'bimvc',
-		'user'			 => 'palmer',
-		'password'		 => 'password',
+		'dbname'		 => '',
+		'user'			 => '',
+		'password'		 => '',
 	);
 	
 	const DOCTRINE_DEV_MODE = false;
